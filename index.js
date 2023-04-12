@@ -11,7 +11,7 @@ require('dotenv').config({path:path.resolve(__dirname,'./.env')});
 const PORT = process.env.PORT
 // console.log(PORT)
 
-app.use(cors({credentials: true, origin: 'https://bankingms.netlify.app/'}))
+app.use(cors({credentials: true, origin: 'https://bankingms.netlify.app'}))
 // connectD
 app.use(express.json());
 app.use(bodyParser.urlencoded({extended:true}));
