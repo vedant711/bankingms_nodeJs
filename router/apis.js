@@ -56,7 +56,7 @@ const generateToken = user => {
     const payload = {
         userid:user._id,
         username:user.name,
-        balance:user.balance,
+        // balance:user.balance,
         pin:user.pin
     };
     const options={
@@ -65,6 +65,12 @@ const generateToken = user => {
     const token = jwt.sign(payload,process.env.JWT_SECRET,options);
     return token
 }
+
+router.get('/balance/:id',async(req,res)=>{
+    let user = await Users.find({_id:req.params.id});
+    const balance = user.balance;
+    res.status(200).json({balance:balance})
+})
 
 router.get('/dashboard/:id',async(req,res)=>{
     let transactions = await Transactions.find({userId:req.params.id});
