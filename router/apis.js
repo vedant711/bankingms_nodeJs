@@ -67,8 +67,9 @@ const generateToken = user => {
 }
 
 router.get('/balance/:id',async(req,res)=>{
-    let user = await Users.find({_id:req.params.id});
+    const user = await Users.findOne({_id:req.params.id});
     const balance = user.balance;
+    // console.log(user.balance)
     res.status(200).json({balance:balance})
 })
 
