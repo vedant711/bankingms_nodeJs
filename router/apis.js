@@ -112,7 +112,7 @@ router.post('/debit/:id',async(req,res)=>{
         let user = await Users.findOne({_id:req.params.id});
         if (isFloat(amount) && parseFloat(user.balance)>=parseFloat(amount)) {
             if (pin==user.pin) {
-                const balance = parseFloat(user.balance)+parseFloat(amount);
+                const balance = parseFloat(user.balance)-parseFloat(amount);
                 await Users.updateOne({_id:req.params.id},{balance:balance})
                 let tran = new Transactions({
                     transaction_type:'DEBIT',
