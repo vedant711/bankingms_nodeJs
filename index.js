@@ -5,6 +5,7 @@ const connectDB = require('./connect')
 const cors = require('cors');
 const path = require('path');
 var bodyParser = require('body-parser')
+const cookieParser = require('cookie-parser')
 
 require('dotenv').config({path:path.resolve(__dirname,'./.env')});
 // console.log(__dirname)
@@ -14,6 +15,7 @@ const PORT = process.env.PORT
 app.use(cors({credentials: true, origin: 'https://bankingms.netlify.app'}))
 // connectD
 app.use(express.json());
+app.use(cookieParser());
 app.use(bodyParser.urlencoded({extended:true}));
 
 app.use(require('./router/apis'))

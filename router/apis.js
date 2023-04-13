@@ -66,16 +66,48 @@ const generateToken = user => {
     return token
 }
 
-router.get('/balance/:id',async(req,res)=>{
-    const user = await Users.findOne({_id:req.params.id});
-    const balance = user.balance;
-    // console.log(user.balance)
-    res.status(200).json({balance:balance})
+router.post('/balance/:id',async(req,res,next)=>{
+    const token = req.body.token
+    // console.log(JSON.stringify(token))
+    // console.log(token.slice(1,-1))
+    if (token) {
+        jwt.verify(token.slice(1,-1),process.env.JWT_SECRET,async(err,decoded)=> {
+            if (err) {
+                res.status(400).json({message:'Bad Request'})
+                console.log(err)
+            } else if (decoded.userid===req.params.id) {
+                const user = await Users.findOne({_id:req.params.id});
+                const balance = user.balance;
+                res.status(200).json({balance:balance})
+                // next();
+            } else {
+                res.status(403).json({message:'Forbiden'})
+            }
+        })
+    }
+
 })
 
-router.get('/dashboard/:id',async(req,res)=>{
-    let transactions = await Transactions.find({userId:req.params.id});
-    res.status(200).json({transactions:transactions})
+router.post('/dashboard/:id',async(req,res)=>{
+    const token = req.body.token
+    // console.log(JSON.stringify(token))
+    // console.log(token.slice(1,-1))
+    if (token) {
+        jwt.verify(token.slice(1,-1),process.env.JWT_SECRET,async(err,decoded)=> {
+            if (err) {
+                res.status(400).json({message:'Bad Request'})
+                console.log(err)
+            } else if (decoded.userid===req.params.id) {
+                let transactions = await Transactions.find({userId:req.params.id});
+                res.status(200).json({transactions:transactions})
+                // res.status(200).json({balance:balance})
+                // next();
+            } else {
+                res.status(403).json({message:'Forbiden'})
+            }
+        })
+    }
+    
 })
 
 router.post('/credit/:id',async(req,res)=>{
